@@ -1,0 +1,20 @@
+node_modules
+dist
+build
+coverage
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+*.log
+npm-debug.log*
+
+.vscode
+.idea
+
+# Working docs — only README.md ships
+*.md
+!README.md
+!frontend/README.md
