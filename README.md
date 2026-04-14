@@ -63,8 +63,8 @@ TaskFlow is a lightweight task manager where small teams can spin up projects, b
 Docker Desktop is the only prerequisite.
 
 ```bash
-git clone https://github.com/rajat-mehra05/taskflow-rajat-mehra-fe.git
-cd taskflow-rajat-mehra-fe
+git clone https://github.com/rajat-mehra05/taskflow-rajat-mehra.git
+cd taskflow-rajat-mehra
 cp .env.example .env
 docker compose up --build
 # App available at http://localhost:3000
@@ -77,8 +77,8 @@ The frontend is built in a Node 20 stage and served from a minimal Nginx alpine 
 Node 20+ required.
 
 ```bash
-git clone https://github.com/rajat-mehra05/taskflow-rajat-mehra-fe.git
-cd taskflow-rajat-mehra-fe/frontend
+git clone https://github.com/rajat-mehra05/taskflow-rajat-mehra.git
+cd taskflow-rajat-mehra/frontend
 npm install
 npm run dev
 # App available at http://localhost:5173
