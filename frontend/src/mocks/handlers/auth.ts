@@ -1,9 +1,19 @@
 import { http, HttpResponse } from 'msw'
 import { db } from '@/mocks/data'
 
-// In-memory session — MSW Service Workers can't use real cookies
-// In production, this would be an HTTP-only cookie set by the backend
-let currentSessionUserId: string | null = null
+// Mock session lives in localStorage so it survives page reloads — mirrors what
+// an HTTP-only auth cookie would do in production. In-memory state would reset
+// every reload and bounce the user back to /login.
+const SESSION_KEY = 'mock_session_user_id'
+
+function setSessionUserId(id: string | null) {
+  if (id) localStorage.setItem(SESSION_KEY, id)
+  else localStorage.removeItem(SESSION_KEY)
+}
+
+function getSessionUserId(): string | null {
+  return localStorage.getItem(SESSION_KEY)
+}
 
 // Generate a fake JWT for spec compliance — not used for auth, just for response shape
 function generateMockToken(userId: string): string {
@@ -15,12 +25,13 @@ function generateMockToken(userId: string): string {
 }
 
 export function getSessionUser() {
-  if (!currentSessionUserId) return null
-  return db.getUserById(currentSessionUserId) ?? null
+  const id = getSessionUserId()
+  if (!id) return null
+  return db.getUserById(id) ?? null
 }
 
 export function clearSession() {
-  currentSessionUserId = null
+  setSessionUserId(null)
 }
 
 export const authHandlers = [
@@ -63,8 +74,7 @@ export const authHandlers = [
       created_at: new Date().toISOString(),
     })
 
-    // Set in-memory session
-    currentSessionUserId = newUser.id
+    setSessionUserId(newUser.id)
 
     const { password: _, ...user } = newUser
 
@@ -103,8 +113,7 @@ export const authHandlers = [
       )
     }
 
-    // Set in-memory session
-    currentSessionUserId = user.id
+    setSessionUserId(user.id)
 
     const { password: _, ...safeUser } = user
 
@@ -116,9 +125,8 @@ export const authHandlers = [
 
   // GET /auth/me
   http.get('/auth/me', () => {
-    const user = currentSessionUserId
-      ? db.getUserById(currentSessionUserId)
-      : null
+    const id = getSessionUserId()
+    const user = id ? db.getUserById(id) : null
 
     if (!user) {
       return HttpResponse.json({ error: 'unauthorized' }, { status: 401 })
@@ -131,7 +139,7 @@ export const authHandlers = [
 
   // POST /auth/logout
   http.post('/auth/logout', () => {
-    currentSessionUserId = null
+    setSessionUserId(null)
     return HttpResponse.json({ message: 'logged out' })
   }),
 ]

@@ -7,6 +7,10 @@ import { ProjectsListPage } from '@/features/projects/ProjectsListPage'
 import { ProjectDetailPage } from '@/features/projects/ProjectDetailPage'
 import { DevApiTest } from '@/features/dev/DevApiTest'
 
+const devRoutes = import.meta.env.DEV
+  ? [{ path: '/dev', element: <DevApiTest /> }]
+  : []
+
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -16,11 +20,7 @@ export const router = createBrowserRouter([
     path: '/register',
     element: <RegisterPage />,
   },
-  // Dev-only route — remove before Phase 3
-  {
-    path: '/dev',
-    element: <DevApiTest />,
-  },
+  ...devRoutes,
   {
     path: '/',
     element: <Navigate to="/projects" replace />,

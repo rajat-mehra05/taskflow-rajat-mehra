@@ -45,20 +45,23 @@ export const STATUS_CONFIG = {
   todo: {
     label: 'Todo',
     className: 'bg-slate-500 text-white dark:bg-slate-600',
-    columnClassName: 'bg-slate-100/70 dark:bg-slate-900/40',
-    columnOverClassName: 'bg-slate-200/80 dark:bg-slate-800/60',
+    columnClassName: 'border border-border bg-muted/40 dark:bg-muted/20',
+    columnOverClassName:
+      'bg-muted/70 dark:bg-muted/40 ring-2 ring-slate-400/60 dark:ring-slate-500/50',
   },
   in_progress: {
     label: 'In Progress',
     className: 'bg-amber-500 text-white dark:bg-amber-600',
-    columnClassName: 'bg-amber-50/50 dark:bg-amber-950/15',
-    columnOverClassName: 'bg-amber-50 dark:bg-amber-950/30',
+    columnClassName: 'border border-border bg-muted/40 dark:bg-muted/20',
+    columnOverClassName:
+      'bg-muted/70 dark:bg-muted/40 ring-2 ring-amber-400/60 dark:ring-amber-500/50',
   },
   done: {
     label: 'Done',
     className: 'bg-emerald-600 text-white dark:bg-emerald-700',
-    columnClassName: 'bg-emerald-50/50 dark:bg-emerald-950/15',
-    columnOverClassName: 'bg-emerald-50 dark:bg-emerald-950/30',
+    columnClassName: 'border border-border bg-muted/40 dark:bg-muted/20',
+    columnOverClassName:
+      'bg-muted/70 dark:bg-muted/40 ring-2 ring-emerald-400/60 dark:ring-emerald-500/50',
   },
 } as const satisfies Record<
   TaskStatus,

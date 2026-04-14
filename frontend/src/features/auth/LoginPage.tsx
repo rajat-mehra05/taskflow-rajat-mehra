@@ -42,10 +42,32 @@ export function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   })
+  const [guestLoading, setGuestLoading] = useState(false)
+
+  async function signInAsGuest() {
+    const creds = { email: 'test@example.com', password: 'password123' }
+    setServerError('')
+    setValue('email', creds.email)
+    setValue('password', creds.password)
+    setGuestLoading(true)
+    try {
+      await login(creds.email, creds.password)
+      void navigate('/projects', { replace: true })
+    } catch (err) {
+      if (err instanceof ApiRequestError) {
+        setServerError(err.body.error)
+      } else {
+        setServerError('Something went wrong. Please try again.')
+      }
+    } finally {
+      setGuestLoading(false)
+    }
+  }
 
   if (authLoading) {
     return (
@@ -125,7 +147,11 @@ export function LoginPage() {
                 </p>
               )}
             </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isSubmitting || guestLoading}
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -136,6 +162,28 @@ export function LoginPage() {
               )}
             </Button>
           </form>
+          <div className="mt-6">
+            <div className="relative flex items-center">
+              <div className="flex-grow border-t border-border" />
+              <span className="mx-3 text-xs uppercase text-muted-foreground">
+                Or
+              </span>
+              <div className="flex-grow border-t border-border" />
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-3 w-full"
+              disabled={isSubmitting || guestLoading}
+              onClick={() => void signInAsGuest()}
+            >
+              {guestLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                'Continue as Test User'
+              )}
+            </Button>
+          </div>
           <p className="mt-4 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
             <Link to="/register" className="text-primary underline">
