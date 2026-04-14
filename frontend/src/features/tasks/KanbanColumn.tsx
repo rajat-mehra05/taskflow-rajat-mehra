@@ -41,7 +41,7 @@ export const KanbanColumn = memo(function KanbanColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`flex min-w-0 flex-1 flex-col rounded-lg p-3 transition-colors min-h-[calc(100vh-220px)] ${
+      className={`flex min-h-[500px] min-w-0 flex-1 flex-col rounded-lg p-3 transition-colors ${
         isOver
           ? STATUS_CONFIG[status].columnOverClassName
           : STATUS_CONFIG[status].columnClassName
@@ -61,13 +61,13 @@ export const KanbanColumn = memo(function KanbanColumn({
           })()}
           {STATUS_LABELS[status]}
         </span>
-        <span className="text-xs text-muted-foreground font-medium">
+        <span className="text-xs font-medium text-muted-foreground">
           {tasks.length}
         </span>
       </div>
 
-      {/* Task list */}
-      <div className="flex flex-1 flex-col gap-2 overflow-y-auto max-h-[calc(100vh-250px)]">
+      {/* Task list — grows with content; page handles overflow */}
+      <div className="flex flex-1 flex-col gap-2">
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <TaskCard

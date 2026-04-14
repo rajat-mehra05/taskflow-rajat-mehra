@@ -48,7 +48,7 @@ export const seedProjects: Project[] = [
 ]
 
 export const seedTasks: Task[] = [
-  // Project 1 tasks — mix of statuses, priorities, assignees
+  // ---- Project 1: Website Redesign ---- (3 todo, 1 in_progress, 1 done)
   {
     id: 't1000001-0000-0000-0000-000000000001',
     title: 'Design homepage mockup',
@@ -64,6 +64,31 @@ export const seedTasks: Task[] = [
   },
   {
     id: 't1000001-0000-0000-0000-000000000002',
+    title: 'Implement dark mode',
+    description: 'Add theme toggle and dark mode styles across all pages',
+    status: 'todo',
+    priority: 'medium',
+    project_id: PROJECT_1_ID,
+    assignee_id: null,
+    due_date: '2026-04-25',
+    created_at: '2026-04-06T10:00:00Z',
+    updated_at: '2026-04-06T10:00:00Z',
+  },
+  {
+    id: 't1000001-0000-0000-0000-000000000003',
+    title: 'Audit current SEO metadata',
+    description:
+      'Review existing meta tags, OG images, and sitemap before migration',
+    status: 'todo',
+    priority: 'low',
+    project_id: PROJECT_1_ID,
+    assignee_id: USER_2_ID,
+    due_date: '2026-04-22',
+    created_at: '2026-04-07T10:00:00Z',
+    updated_at: '2026-04-07T10:00:00Z',
+  },
+  {
+    id: 't1000001-0000-0000-0000-000000000004',
     title: 'Set up CI/CD pipeline',
     description:
       'Configure GitHub Actions for automated testing and deployment',
@@ -76,7 +101,7 @@ export const seedTasks: Task[] = [
     updated_at: '2026-04-06T10:00:00Z',
   },
   {
-    id: 't1000001-0000-0000-0000-000000000003',
+    id: 't1000001-0000-0000-0000-000000000005',
     title: 'Write API documentation',
     description: '',
     status: 'done',
@@ -87,21 +112,46 @@ export const seedTasks: Task[] = [
     created_at: '2026-04-03T10:00:00Z',
     updated_at: '2026-04-09T10:00:00Z',
   },
+
+  // ---- Project 2: Mobile App ---- (3 todo, 1 in_progress, 1 done)
   {
-    id: 't1000001-0000-0000-0000-000000000004',
-    title: 'Implement dark mode',
-    description: 'Add theme toggle and dark mode styles across all pages',
+    id: 't2000001-0000-0000-0000-000000000001',
+    title: 'Draft onboarding screens',
+    description: 'Sketch the 3-step onboarding flow and review with design',
     status: 'todo',
-    priority: 'medium',
-    project_id: PROJECT_1_ID,
-    assignee_id: null,
-    due_date: null,
+    priority: 'high',
+    project_id: PROJECT_2_ID,
+    assignee_id: USER_2_ID,
+    due_date: '2026-04-21',
     created_at: '2026-04-06T10:00:00Z',
     updated_at: '2026-04-06T10:00:00Z',
   },
-  // Project 2 tasks
   {
-    id: 't2000001-0000-0000-0000-000000000001',
+    id: 't2000001-0000-0000-0000-000000000002',
+    title: 'Integrate push notifications',
+    description: 'Wire up FCM for Android and APNs for iOS',
+    status: 'todo',
+    priority: 'medium',
+    project_id: PROJECT_2_ID,
+    assignee_id: USER_1_ID,
+    due_date: '2026-04-28',
+    created_at: '2026-04-07T10:00:00Z',
+    updated_at: '2026-04-07T10:00:00Z',
+  },
+  {
+    id: 't2000001-0000-0000-0000-000000000003',
+    title: 'Configure analytics SDK',
+    description: '',
+    status: 'todo',
+    priority: 'low',
+    project_id: PROJECT_2_ID,
+    assignee_id: null,
+    due_date: null,
+    created_at: '2026-04-08T10:00:00Z',
+    updated_at: '2026-04-08T10:00:00Z',
+  },
+  {
+    id: 't2000001-0000-0000-0000-000000000004',
     title: 'Set up React Native project',
     description: 'Initialize the project with Expo and configure navigation',
     status: 'in_progress',
@@ -113,7 +163,7 @@ export const seedTasks: Task[] = [
     updated_at: '2026-04-07T10:00:00Z',
   },
   {
-    id: 't2000001-0000-0000-0000-000000000002',
+    id: 't2000001-0000-0000-0000-000000000005',
     title: 'Design app icon',
     description: '',
     status: 'done',

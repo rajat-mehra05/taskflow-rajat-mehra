@@ -10,11 +10,18 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/components/ui/**'],
+    // UI primitives are source-owned shadcn components that can legitimately
+    // run long. Dev-only routes are gated out of production builds. Mock
+    // handlers and seed data are data modules, not UI components.
+    ignores: [
+      'src/components/ui/**',
+      'src/features/dev/**',
+      'src/mocks/**',
+    ],
     rules: {
       'max-lines': [
-        'warn',
-        { max: 150, skipBlankLines: true, skipComments: true },
+        'error',
+        { max: 200, skipBlankLines: true, skipComments: true },
       ],
     },
   },

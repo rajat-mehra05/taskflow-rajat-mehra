@@ -47,42 +47,32 @@ export function Navbar() {
             )}
           </Button>
 
-          {/* Desktop: user name + logout */}
-          <div className="hidden items-center gap-3 sm:flex">
-            <span className="max-w-[150px] truncate text-sm text-muted-foreground">
-              {user?.name}
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => void handleLogout()}
-              aria-label="Log out"
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className="cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-ring"
+              aria-label={user?.name ? `${user.name} — open user menu` : 'User menu'}
             >
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
-
-          {/* Mobile: avatar dropdown */}
-          <div className="sm:hidden">
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring"
-                aria-label="User menu"
+              <UserAvatar name={user?.name ?? null} size="md" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[200px]">
+              <div className="px-2 py-1.5">
+                <p className="truncate text-sm font-medium">{user?.name}</p>
+                {user?.email && (
+                  <p className="truncate text-xs text-muted-foreground">
+                    {user.email}
+                  </p>
+                )}
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => void handleLogout()}
               >
-                <UserAvatar name={user?.name ?? null} size="md" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <div className="px-2 py-1.5 text-sm font-medium">
-                  {user?.name}
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => void handleLogout()}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                <LogOut className="mr-2 h-4 w-4" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </nav>
     </header>

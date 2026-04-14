@@ -16,7 +16,7 @@ export interface User {
 export interface Project {
   id: string
   name: string
-  description: string
+  description: string | null
   owner_id: string
   created_at: string
 }
@@ -28,7 +28,7 @@ export interface ProjectWithTasks extends Project {
 export interface Task {
   id: string
   title: string
-  description: string
+  description: string | null
   status: TaskStatus
   priority: TaskPriority
   project_id: string
