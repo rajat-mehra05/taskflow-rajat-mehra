@@ -2,6 +2,14 @@
 
 ---
 
+## Preview
+
+| Light mode | Dark mode | Edit task |
+|---|---|---|
+| ![Projects list — light mode](frontend/public/light-mode.png) | ![Projects list — dark mode](frontend/public/dark-mode.png) | ![Edit task modal](frontend/public/edit-task.png) |
+
+---
+
 ## 1. Overview
 
 TaskFlow is a lightweight task manager where small teams can spin up projects, break work into tasks and track progress on a Kanban board. It's a frontend-only build against a mocked REST API that mirrors a realistic backend contract end to end.
@@ -129,10 +137,6 @@ This build was time-boxed and I prioritised breadth of features over a test suit
 **Real backend**
 
 Replace MSW with a Go + Postgres service behind the exact same REST contract. Removing the MSW bootstrap in `main.tsx` is the only frontend change required.
-
-**Persist the mock DB across reloads**
-
-Today the in-memory MSW store resets on refresh. Sessions survive (auth is in `localStorage`) but created projects and tasks don't. Mirroring mutations to `localStorage` would make demo sessions feel like a real app without needing a backend.
 
 **Real-time collaboration**
 
