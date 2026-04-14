@@ -176,12 +176,56 @@ export const seedTasks: Task[] = [
   },
 ]
 
-// ---- In-memory database ----
-// MSW handlers mutate these arrays to simulate a real API
+// ---- In-memory database, mirrored to localStorage ----
+// MSW mutations are written through to localStorage so that projects and
+// tasks created in a session survive page reloads. Without this, a reviewer
+// who creates a task and hits refresh sees it vanish and assumes the app is
+// broken. On init we hydrate from storage; on mutation we flush.
 
-let users = [...seedUsers]
-let projects = [...seedProjects]
-let tasks = [...seedTasks]
+const DB_STORAGE_KEY = 'mock_db_v1'
+
+interface PersistedDb {
+  users: SeedUser[]
+  projects: Project[]
+  tasks: Task[]
+}
+
+function freshDb(): PersistedDb {
+  return {
+    users: [...seedUsers],
+    projects: [...seedProjects],
+    tasks: [...seedTasks],
+  }
+}
+
+function loadDb(): PersistedDb {
+  try {
+    const raw = localStorage.getItem(DB_STORAGE_KEY)
+    if (!raw) return freshDb()
+    const parsed = JSON.parse(raw) as Partial<PersistedDb>
+    if (!parsed.users || !parsed.projects || !parsed.tasks) return freshDb()
+    return {
+      users: parsed.users,
+      projects: parsed.projects,
+      tasks: parsed.tasks,
+    }
+  } catch {
+    return freshDb()
+  }
+}
+
+function persist() {
+  try {
+    localStorage.setItem(
+      DB_STORAGE_KEY,
+      JSON.stringify({ users, projects, tasks }),
+    )
+  } catch {
+    // Storage quota or private-mode failure — fall back to in-memory only.
+  }
+}
+
+let { users, projects, tasks } = loadDb()
 
 export const db = {
   // Users
@@ -190,6 +234,7 @@ export const db = {
   getUserById: (id: string) => users.find((u) => u.id === id),
   createUser: (user: SeedUser) => {
     users.push(user)
+    persist()
     return user
   },
 
@@ -209,6 +254,7 @@ export const db = {
   },
   createProject: (project: Project) => {
     projects.push(project)
+    persist()
     return project
   },
   updateProject: (id: string, updates: Partial<Project>) => {
@@ -216,11 +262,13 @@ export const db = {
     if (!existing) return null
     const updated = { ...existing, ...updates }
     projects = projects.map((p) => (p.id === id ? updated : p))
+    persist()
     return updated
   },
   deleteProject: (id: string) => {
     projects = projects.filter((p) => p.id !== id)
     tasks = tasks.filter((t) => t.project_id !== id)
+    persist()
   },
 
   // Tasks
@@ -229,6 +277,7 @@ export const db = {
   getTaskById: (id: string) => tasks.find((t) => t.id === id),
   createTask: (task: Task) => {
     tasks.push(task)
+    persist()
     return task
   },
   updateTask: (id: string, updates: Partial<Task>) => {
@@ -240,16 +289,24 @@ export const db = {
       updated_at: new Date().toISOString(),
     }
     tasks = tasks.map((t) => (t.id === id ? updated : t))
+    persist()
     return updated
   },
   deleteTask: (id: string) => {
     tasks = tasks.filter((t) => t.id !== id)
+    persist()
   },
 
-  // Reset for tests
+  // Reset back to seed data — used by tests and available as an escape hatch.
   reset: () => {
-    users = [...seedUsers]
-    projects = [...seedProjects]
-    tasks = [...seedTasks]
+    const fresh = freshDb()
+    users = fresh.users
+    projects = fresh.projects
+    tasks = fresh.tasks
+    try {
+      localStorage.removeItem(DB_STORAGE_KEY)
+    } catch {
+      // Storage inaccessible — in-memory reset still applies.
+    }
   },
 }
